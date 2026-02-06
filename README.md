@@ -4,6 +4,10 @@
 
 This Flask application provides a web-based interface for various functionalities. The application is built using Python and the Flask web framework.
 
+![Car Listing App Sample](static/images/car-listing-app.png)
+
+_Sample screenshot showing what to expect from the car listing application interface_
+
 ## Requirements
 
 - Python 3.7 or higher
