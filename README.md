@@ -14,6 +14,18 @@ _Sample screenshot showing what to expect from the car listing application inter
 - Flask
 - Additional dependencies (see requirements.txt)
 
+## Running the app off the shelf
+
+The greatest update I've made to this app is the ability to run this within Docker. Yes, this is already dockerized and ready to use. You can add the pipeline process for any cloud hosting platform Azure or AWS, your choice.
+
+Let's get started, to run Docker, you first have to have Docker installed in your machine. If you don't have Docker, go to docker.com and install it. After that, you have to have it running. Then, clone this repo and go to the place where you have it installed. In your terminal, go that same location and run the following:
+`docker compose up -d`
+
+that will start the website at: [http://localhost:8000/](http://localhost:8000/)
+it will run the docker build if necessary to run the image.
+`docker build`
+If you want to contribute to this repository, contact me or fork the build and I will catch it. I hope you like this app.
+
 ## Installation
 
 1. Clone the repository:bash
@@ -27,16 +39,17 @@ _Sample screenshot showing what to expect from the car listing application inter
 
 1. Create a virtual environment using venv (Python 3.3+):
 
-`python -m venv flask_env`
+`python -m venv env`
 
 2. Alternative using virtualenv (if installed):
 
-`virtualenv flask_env`
+`virtualenv env`
 
 3. Activate the virtual environment:
 
-On Windows: `flask_env\Scripts\activate`
-On macOS/Linux: `source flask_env/bin/activate`
+On Windows: `env\Scripts\activate`
+On macOS/Linux:
+`source env/bin/activate`
 
 4. Install dependencies:
 

@@ -1,30 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Car Listings application: Details</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-</head>
+{% block title %}Car Details{% endblock %}
 
-<body>
-  <div class="container">
-    <div class="details-container" style="max-width: 800px; margin: 50px auto; display: flex; gap: 40px;">
-      <div class="details-image" style="flex: 1;">
-        <img src="{{ url_for('static', filename='uploads/' + car.image_file) if car.image_file else '#' }}"
-          style="width: 100%; border-radius: 12px;">
-      </div>
-      <div class="details-content" style="flex: 1;">
-        <h1>{{ car.make }} {{ car.model }}</h1>
-        <p><strong>Year:</strong> {{ car.year }}</p>
-        <p><strong>Color:</strong> {{ car.color }}</p>
-        <p><strong>Status:</strong> {{ 'Running' if car.is_running else 'Not Running' }}</p>
-        <!-- Add any other database columns here -->
-        <a href="/" style="display: inline-block; margin-top: 20px;">← Back to Listings</a>
+{% block content %}
+<div class="container my-5">
+  <div class="row g-5">
+
+    <!-- Image Section -->
+    <div class="col-md-6">
+      <div class="p-3 bg-light rounded-3 shadow-sm">
+        {% if car.image_file %}
+        <img src="{{ url_for('static', filename='uploads/' + car.image_file) }}" alt="{{ car.make }} {{ car.model }}"
+          class="img-fluid rounded-3"> <!-- img-fluid makes width 100% and responsive -->
+        {% else %}
+        <div class="d-flex align-items-center justify-content-center text-muted"
+          style="height: 300px; background-color: #e9ecef; border-radius: .3rem;">
+          No Image Available
+        </div>
+        {% endif %}
       </div>
     </div>
-  </div>
-</body>
 
-</html>
+    <!-- Details Section -->
+    <div class="col-md-6">
+      <h1>{{ car.make }} {{ car.model }}</h1>
+      <hr>
+
+      <!-- Use a list group for a cleaner look -->
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Year:</strong> {{ car.year }}</li>
+        <li class="list-group-item"><strong>Color:</strong> {{ car.color }}</li>
+        <li class="list-group-item"><strong>Status:</strong> {{ 'Running' if car.is_running else 'Not Running' }}</li>
+        <li class="list-group-item"><strong>Fuel Type:</strong> {{ car.fuel_type or 'N/A' }}</li>
+        <li class="list-group-item"><strong>Transmission:</strong> {{ car.transmission or 'N/A' }}</li>
+        <li class="list-group-item"><strong>Mileage:</strong>
+          {% if car.mileage %}
+          {{ "{:,.0f}".format(car.mileage) }} miles
+          {% else %}
+          N/A
+          {% endif %}
+        </li>
+        <li class="list-group-item"><strong>Price:</strong> ${{ "{:,.0f}".format(car.price) if car.price else 'N/A' }}
+        </li>
+      </ul>
+
+      <!-- Back Button -->
+      <a href="{{ url_for('home') }}" class="btn btn-secondary mt-4">← Back to Listings</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -10,8 +10,21 @@ manager = CarManager()
 def home():
     # Retrieve the list of dictionaries from your manager
     cars_data = manager.list_cars()
-    # Pass it to the template as 'data'
-    return render_template("index.html", data=cars_data)
+    
+    # Create the separate, sorted list for latest entries
+    sorted_cars = sorted(cars_data, key=lambda car: car['id'], reverse=True)
+
+    # Pass both lists to the template with distinct names
+    return render_template(
+        "index.html", 
+        all_cars=cars_data, 
+        latest_cars=sorted_cars
+    )
+
+@app.route('/add_car')
+def add_car_page():
+    
+    return render_template("add_car.html", data=[])
 
 @app.route('/car/<int:car_id>')
 def car_details(car_id):
@@ -42,6 +55,11 @@ def add_car_route(): # Renamed the function slightly to avoid confusion with the
         model = request.form.get('model')
         year_raw = request.form.get('year')
         color = request.form.get('color')
+        is_running = request.form.get('is_running') == 1  # Checkbox returns 'on' if checked
+        fuel_type = request.form.get('fuel_type')
+        price = request.form.get('price')
+        transmission = request.form.get('transmission')
+        mileage = request.form.get('mileage')
 
         # 2. Capture the image file
         image = request.files.get('image_file')
@@ -60,7 +78,12 @@ def add_car_route(): # Renamed the function slightly to avoid confusion with the
             make=make, 
             model=model, 
             year=year, 
-            color=color
+            color=color,
+            is_running=is_running,
+            fuel_type=fuel_type,
+            price=price,
+            transmission=transmission,
+            mileage=mileage
         )
 
         # 5. FIX: Call manager.add_car (instead of create_car) to match your class
@@ -124,4 +147,4 @@ def stop_car(make, model):
   return jsonify({"error": "Car not found", "message": "Failed to stop car - car does not exist"}), 404
 
 if __name__ == "__main__":
-  app.run(port=8000,debug=True)
+  app.run(port=9000,debug=True)

@@ -30,12 +30,17 @@ import sqlite3
 from werkzeug.utils import secure_filename
 
 class Car:
-  def __init__(self, make: str, model: str, year: int, color: str):
+  def __init__(self, make: str, model: str, year: int, color: str,is_running:bool, fuel_type: str, price: int, transmission: str, mileage: int):
     self.make = make
     self.model = model
     self.year = year
     self.color = color
-    self.is_running = False
+    self.is_running = is_running
+    self.fuel_type = fuel_type
+    self.price = price
+    self.transmission = transmission
+    self.mileage = mileage
+    
   
   def start(self):
     self.is_running = True
@@ -63,7 +68,11 @@ class CarManager:
         year INTEGER NOT NULL,
         color TEXT NOT NULL,
         is_running BOOLEAN DEFAULT FALSE,
-        image_file TEXT
+        image_file TEXT,
+        fuel_type TEXT,
+        price INTEGER,
+        transmission TEXT,
+        mileage INTEGER
       )
     ''')
     self.conn.commit()
@@ -79,9 +88,9 @@ class CarManager:
         
         # 3. Use the local 'cursor' (NOT self.cursor) to insert
         cursor.execute('''
-          INSERT INTO cars (make, model, year, color, is_running, image_file)
-          VALUES (?, ?, ?, ?, ?)
-        ''', (car.make, car.model, car.year, car.color, car.is_running, None))
+          INSERT INTO cars (make, model, year, color, is_running, image_file, fuel_type, price, transmission, mileage)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+        ''', (car.make, car.model, car.year, car.color, car.is_running, None, car.fuel_type if hasattr(car, 'fuel_type') else None, car.price if hasattr(car, 'price') else None, car.transmission if hasattr(car, 'transmission') else None, getattr(car, 'mileage', None)))
         
         # 4. Use the local 'conn' (NOT self.conn) to commit
         conn.commit()
@@ -118,15 +127,19 @@ class CarManager:
             # Ensure the car object has all these attributes!
             # Note: Added car.is_running - make sure your Car class has this.
             cursor.execute('''
-              INSERT INTO cars (make, model, year, color, is_running, image_file)
-              VALUES (?, ?, ?, ?, ?, ?)
+              INSERT INTO cars (make, model, year, color, is_running, image_file, fuel_type, price, transmission, mileage)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 car.make, 
                 car.model, 
                 car.year, 
                 car.color, 
                 getattr(car, 'is_running', True), # Fallback to True if missing
-                image_filename
+                image_filename,
+                car.fuel_type if hasattr(car, 'fuel_type') else None,
+                car.price if hasattr(car, 'price') else None,
+                car.transmission if hasattr(car, 'transmission') else None,
+                car.mileage if hasattr(car, 'mileage') else None
             ))
             conn.commit()
             
