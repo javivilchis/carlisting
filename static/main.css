@@ -176,3 +176,53 @@ h1 {
 .form-container button:hover {
   background-color: #218838;
 }
+
+#carForm {
+  display: grid;
+  /* Creates a two-column grid with a fixed width for labels (150px) */
+  grid-template-columns: 150px 1fr;
+  gap: 15px; /* Space between inputs */
+  max-width: 600px;
+  margin: 20px auto; /* Centers the form on the page */
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style all inputs except the button and checkbox */
+#carForm input:not([type="checkbox"]):not([type="submit"]):not([type="button"]),
+#carForm select,
+#carForm button {
+  width: 100%; /* Makes inputs span the full width of the second column */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensures padding doesn't increase width */
+}
+
+/* Position inputs that lack a label to start in the first column */
+#carForm input,
+#carForm input[type="number"] {
+  grid-column: 1 / span 2; /* Makes these span both columns */
+}
+
+/* Handle Checkbox positioning */
+#carForm input[type="checkbox"] {
+  justify-self: start;
+  align-self: center;
+}
+
+/* Position the submit button to span across both columns */
+#carForm button[type="submit"] {
+  grid-column: 1 / span 2;
+  background-color: #28a745;
+  color: white;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+}
+
+#carForm button[type="submit"]:hover {
+  background-color: #218838;
+}

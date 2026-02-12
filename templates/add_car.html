@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block title %}Car Listings - Add Car{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row g-5">
+    <div class="col-md-7 col-lg-8">
+      <h4 class="mb-3">Add a New Car to Inventory</h4>
+      <!-- The form element needs the Bootstrap validation class -->
+      <form id="carForm" class="needs-validation" novalidate onsubmit="return false;">
+
+        <!-- Row 1: Make and Model -->
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="make" class="form-label">Make</label>
+            <input type="text" class="form-control" id="make" name="make" placeholder="e.g. Toyota" required>
+            <div class="invalid-feedback">
+              Valid make is required.
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="model" class="form-label">Model</label>
+            <input type="text" class="form-control" id="model" name="model" placeholder="e.g. Camry" required>
+            <div class="invalid-feedback">
+              Valid model is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Year, Color, Fuel Type -->
+        <div class="row g-3 mt-0">
+          <div class="col-md-4">
+            <label for="year" class="form-label">Year</label>
+            <input type="number" class="form-control" id="year" name="year" placeholder="e.g. 2022" required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="color" class="form-label">Color</label>
+            <input type="text" class="form-control" id="color" name="color" placeholder="e.g. Red">
+          </div>
+
+          <div class="col-md-4">
+            <label for="fuel_type" class="form-label">Fuel Type</label>
+            <input type="text" class="form-control" id="fuel_type" name="fuel_type" placeholder="e.g. Gasoline">
+          </div>
+        </div>
+
+        <!-- Row 3: Price, Transmission, Mileage -->
+        <div class="row g-3 mt-0">
+          <div class="col-md-4">
+            <label for="price" class="form-label">Price ($)</label>
+            <input type="number" class="form-control" id="price" name="price" placeholder="e.g. 25000">
+          </div>
+
+          <div class="col-md-4">
+            <label for="transmission" class="form-label">Transmission</label>
+            <input type="text" class="form-control" id="transmission" name="transmission" placeholder="e.g. Automatic">
+          </div>
+
+          <div class="col-md-4">
+            <label for="mileage" class="form-label">Mileage</label>
+            <input type="number" class="form-control" id="mileage" name="mileage" placeholder="e.g. 50000">
+          </div>
+        </div>
+
+        <!-- Row 4: Checkbox and File Upload -->
+        <hr class="my-4">
+
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="is_running" name="is_running">
+          <label class="form-check-label" for="is_running">Is currently running/operational?</label>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="image_file" class="form-label">Car Image (Upload File)</label>
+          <input class="form-control" type="file" id="image_file" name="image_file" accept="image/*">
+        </div>
+
+        <!-- Submit Button -->
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Add Car to Inventory</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Ensure your JavaScript for submission is included here -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const carForm = document.getElementById('carForm');
+    if (carForm) {
+      carForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // Add basic Bootstrap validation check
+        if (!carForm.checkValidity()) {
+          e.stopPropagation();
+          carForm.classList.add('was-validated');
+          return;
+        }
+
+        const formData = new FormData(e.target);
+        try {
+          const response = await fetch('/api/cars', { method: 'POST', body: formData });
+          const result = await response.json();
+          if (response.ok) {
+            alert("Success! Car added.");
+            window.location.href = "{{ url_for('home') }}"; // Redirect to home page
+          } else {
+            alert("Error: " + (result.error || result.message));
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Failed to connect to the server.");
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

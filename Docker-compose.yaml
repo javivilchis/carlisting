@@ -1,0 +1,28 @@
+services:
+  # Name of your service
+  flask-app:
+    container_name: flask-app
+
+    image: flask-app:latest
+    # Use the existing Dockerfile in the current directory
+    build: .
+
+    # Map port 5000 on your computer to port 5000 inside the container
+    ports:
+      # If port 5000 is still busy (from your previous error), change "5000:5000" to "8000:5000"
+      - "8000:5000"
+
+    # Mount the local source code into the container
+    # This allows for live updates when you use 'flask run --debug'
+    volumes:
+      - .:/app
+
+    # Define environment variables used by Flask
+    environment:
+      # Tells Flask which file is the entry point
+      - FLASK_APP=api.py
+      # Enables debug mode and automatic code reloading on changes
+      - FLASK_DEBUG=1
+
+    # The command to run the application within the container
+    command: ["flask", "run", "--host", "0.0.0.0"]
